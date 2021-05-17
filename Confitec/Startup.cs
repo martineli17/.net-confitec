@@ -35,6 +35,11 @@ namespace Confitec
                 options.JsonSerializerOptions.IgnoreNullValues = true;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
+            services.AddCors(options => options.AddPolicy("CorsOptions", x =>
+                                                x.AllowAnyHeader()
+                                                .AllowAnyMethod()
+                                                .AllowCredentials()
+                                                .WithOrigins("http://localhost:4200")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Confitec", Version = "v1" });
@@ -53,6 +58,7 @@ namespace Confitec
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Confitec v1"));
             }
+            app.UseCors("CorsOptions");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
